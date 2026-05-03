@@ -23,3 +23,11 @@ class EmbeddingManager:
         embeddings = self.model.encode(texts, show_progress_bar=True)
         print(f"✓ Generated embeddings with shape: {embeddings.shape}")
         return embeddings
+
+
+def main():
+    pass
+
+
+if __name__ == "__main__":
+    main()

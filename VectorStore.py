@@ -65,3 +65,11 @@ class VectorStore:
         )
 
         print(f"[INFO] Stored {len(documents)} chunks in ChromaDB")
+
+
+def main():
+    pass
+
+
+if __name__ == "__main__":
+    main()
