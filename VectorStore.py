@@ -1,4 +1,4 @@
-import chromadb
+﻿import chromadb
 import os
 import uuid
 import hashlib
@@ -51,11 +51,14 @@ class VectorStore:
         embeddings_list = []
         metadatas = []
 
-        for chunk, embedding in zip(documents, embeddings):
+        for i, (chunk, embedding) in enumerate(zip(documents, embeddings)):
             ids.append(self.create_chunk_id(chunk))
             documents_text.append(chunk.page_content)
             embeddings_list.append(embedding.tolist())
-            metadatas.append(chunk.metadata)
+            metadata = dict(chunk.metadata)
+            metadata["doc_index"] = i
+            metadata["content_length"] = len(chunk.page_content)
+            metadatas.append(metadata)
 
         self.collection.upsert(
             ids=ids,
@@ -68,7 +71,7 @@ class VectorStore:
 
 
 def main():
-    pass
+    vectorstore = VectorStore()
 
 
 if __name__ == "__main__":

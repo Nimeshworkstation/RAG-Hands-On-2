@@ -19,6 +19,8 @@ class EmbeddingManager:
             raise
 
     def generate_embedding(self, texts: List[str]) -> np.ndarray:
+        if not self.model:
+            raise ValueError("Model not found")
         print(f"Generating embeddings for {len(texts)} text(s)...")
         embeddings = self.model.encode(texts, show_progress_bar=True)
         print(f"✓ Generated embeddings with shape: {embeddings.shape}")

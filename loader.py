@@ -10,15 +10,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
 
-def embed_chunks(documents):
-    embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-mpnet-base-v2"
-    )
-    for doc in documents:
-        doc_vectors = embeddings.embed_documents(doc.page_content)
-
-
 def load_documents_directory_loader(data_dir: Path):
+    "Using Directory loader instead of Individual loader"
     documents = []
     dir_loader = DirectoryLoader(
         path=data_dir,
@@ -31,6 +24,7 @@ def load_documents_directory_loader(data_dir: Path):
 
 
 def load_documents(data_dir: Path) -> List[Document]:
+    "Using individual loader"
     documents: List[Document] = []
     len_total_files = len([item for item in data_dir.iterdir()])
     print(f"found {len_total_files} files/objects to process")
