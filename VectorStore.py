@@ -11,7 +11,7 @@ class VectorStore:
     def __init__(
         self,
         collection_name: str = "pdf-documents",
-        persist_directory: str = "../data/vector_store",
+        persist_directory: str = "data/vector_store",
     ):
         self.collection_name = collection_name
         self.persist_directory = persist_directory
@@ -25,19 +25,24 @@ class VectorStore:
             self.client = chromadb.PersistentClient(path=self.persist_directory)
             self.collection = self.client.get_or_create_collection(
                 name=self.collection_name,
-                metadata={"description": "PDF document embedding for RAG"},
+                metadata={
+                    "description": "PDF document embedding for RAG",
+                    "hnsw:space": "cosine",
+                },
             )
+            print(self.collection)
+            print(self.collection.metadata)
             print(f"Vector Store initialized. Collection: {self.collection_name}")
             print(f"Existing documents in collection: {self.collection.count()}")
         except Exception as e:
             print(f"Error occured {e}")
             raise
 
-    def create_chunk_id(self, chunk):
+    def create_chunk_id(self, chunk, index):
         source = chunk.metadata.get("source", "")
         page = chunk.metadata.get("page", "")
         text = chunk.page_content
-        raw = f"{source}|{page}|{text}".encode("utf-8")
+        raw = f"{source}|{page}|{text}|{index}".encode("utf-8")
         return hashlib.sha256(raw).hexdigest()
 
     def add_documents(self, documents: List[Document], embeddings: np.ndarray):
@@ -51,12 +56,12 @@ class VectorStore:
         embeddings_list = []
         metadatas = []
 
-        for i, (chunk, embedding) in enumerate(zip(documents, embeddings)):
-            ids.append(self.create_chunk_id(chunk))
+        for index, (chunk, embedding) in enumerate(zip(documents, embeddings)):
+            ids.append(self.create_chunk_id(chunk, index))
             documents_text.append(chunk.page_content)
             embeddings_list.append(embedding.tolist())
             metadata = dict(chunk.metadata)
-            metadata["doc_index"] = i
+            metadata["doc_index"] = index
             metadata["content_length"] = len(chunk.page_content)
             metadatas.append(metadata)
 
