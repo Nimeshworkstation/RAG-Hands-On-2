@@ -2,7 +2,7 @@ from vectorstore import VectorStore
 from embedder import EmbeddingManager
 
 
-class RAGRetrival:
+class RAGRetreival:
     """Handles query-based retrival from the vector store"""
 
     def __init__(self, vector_store: VectorStore, embedding_manager: EmbeddingManager):
@@ -12,7 +12,7 @@ class RAGRetrival:
             self.vector_store.collection_name
         )
 
-    def retrieve(self, query: str, top_k: int = 5, score_threshold: float = 0.0):
+    def retrieve(self, query: str, top_k: int = 3, score_threshold: float = 0.0):
         retrieved_docs = []
         query_embedding = self.embedding_manager.generate_embedding([query])[0]
         result = self.collection.query(
@@ -26,7 +26,6 @@ class RAGRetrival:
             metadatas = result.get("metadatas")[0]
             distances = result.get("distances")[0]
             ids = result.get("ids")[0]
-            print(distances, "===========================")
 
             for index, (doc_id, document, metadata, distance) in enumerate(
                 zip(ids, documents, metadatas, distances)
@@ -40,6 +39,7 @@ class RAGRetrival:
                             "content": document,
                             "metadata": metadata,
                             "distance": distance,
+                            "similarity_score": similiarity_score,
                             "rank": index + 1,
                         }
                     )
@@ -53,8 +53,8 @@ class RAGRetrival:
 def main():
     vector_store = VectorStore()
     embedding_manager = EmbeddingManager()
-    embedded_query = RAGRetrival(vector_store, embedding_manager)
-    data = embedded_query.retrieve("Initiativbewerbung als Software-Entwickler")
+    retriever = RAGRetreival(vector_store, embedding_manager)
+    data = retriever.retrieve("Nimesh Ghimire")
     print(data)
 
 
