@@ -7,7 +7,6 @@ from langchain_community.document_loaders import (
     DirectoryLoader,
 )
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceEmbeddings
 
 
 def load_documents_directory_loader(data_dir: Path):
