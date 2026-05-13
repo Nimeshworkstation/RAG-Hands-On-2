@@ -4,12 +4,7 @@ from typing import List
 from langchain_community.document_loaders import (
     PyPDFLoader,
     TextLoader,
-    CSVLoader,
-    Docx2txtLoader,
-    JSONLoader,
-    UnstructuredExcelLoader,
 )
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
 def update_metadata(loader, path):
