@@ -29,3 +29,25 @@ def create_prompt(question: str, context: str):
         
 
         """
+
+
+def create_context(retrieved_docs, detail=False):
+    details = {}
+    if not retrieved_docs:
+        print("⚠ No documents retrieved for context")
+        return ""
+    context = "\n\n".join([doc.get("content", "") for doc in retrieved_docs])
+    if not detail:
+        return context
+    details["sources"] = [
+        {
+            "source": doc.get("metadata").get("source"),
+            "score": doc.get("similiarity_score", ""),
+            "page": doc.get("metadata").get("page"),
+            "preview": doc.get("content", "") + " ...",
+        }
+        for doc in retrieved_docs
+    ]
+    details["confidence"] = max([doc["similiarity_score"] for doc in retrieved_docs])
+    details["context"] = context
+    return details

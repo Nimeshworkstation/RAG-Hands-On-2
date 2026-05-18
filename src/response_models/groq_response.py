@@ -23,13 +23,26 @@ class GenerateGroqResponse:
 
         print(f"✓ Initialized Groq LLM with model: {self.model}")
 
-    def generate_answer(self, prompt):
+    def generate_answer(self, prompt, detail=False, **details):
+        if not prompt:
+            raise ValueError("Prompt is empty")
+
         print("💭 Generating answer...\n")
         try:
             response = self.llm.invoke(prompt)
         except Exception as e:
             raise RuntimeError(f"Failed to generate answer: {str(e)}")
-        return response.content
+        if not detail:
+            return response.content
+
+        output = {
+            "answer": response.content,
+            "sources": details.get("sources", ""),
+            "confidence": details.get("confidence", ""),
+            "context": details.get("context", ""),
+        }
+
+        return output
 
 
 def main():
