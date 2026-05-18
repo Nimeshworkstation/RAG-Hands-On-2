@@ -74,6 +74,43 @@ class VectorStore:
 
         print(f"[INFO] Stored {len(documents)} chunks in ChromaDB")
 
+    def retrieve_documents(
+        self, query_embeddings: np.ndarray, top_k: int = 3, score_threshold: float = 0.0
+    ):
+        retrieved_docs = []
+        result = self.collection.query(
+            query_embeddings=[query_embeddings.tolist()],
+            n_results=top_k,
+            include=["documents", "metadatas", "distances"],
+        )
+        if result.get("documents") and result.get("documents")[0]:
+            documents = result.get("documents")[0]
+            metadatas = result.get("metadatas")[0]
+            distances = result.get("distances")[0]
+            ids = result.get("ids")[0]
+
+            for index, (doc_id, document, metadata, distance) in enumerate(
+                zip(ids, documents, metadatas, distances)
+            ):
+
+                similiarity_score = 1 - distance
+                if similiarity_score >= score_threshold:
+                    retrieved_docs.append(
+                        {
+                            "id": doc_id,
+                            "content": document,
+                            "metadata": metadata,
+                            "distance": distance,
+                            "similarity_score": similiarity_score,
+                            "rank": index + 1,
+                        }
+                    )
+            print(f"Retrieved {len(retrieved_docs)} docuemnt (after filtering)")
+        else:
+            print("No document found")
+
+        return retrieved_docs
+
 
 def main():
     vectorstore = VectorStore()
