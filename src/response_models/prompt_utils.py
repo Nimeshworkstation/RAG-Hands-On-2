@@ -1,4 +1,4 @@
-def create_context(self, retrieved_docs):
+def create_context(retrieved_docs):
     if not retrieved_docs:
         print("⚠ No documents retrieved for context")
         return
@@ -6,7 +6,7 @@ def create_context(self, retrieved_docs):
     return context
 
 
-def create_prompt(self, question: str, context: str):
+def create_prompt(question: str, context: str):
     if not context:
         print("⚠ Not enough context found to answer the question")
         return None

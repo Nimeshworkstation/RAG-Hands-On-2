@@ -7,7 +7,6 @@ class GenerateGroqResponse:
     def __init__(self, api_key="", model="llama-3.1-8b-instant"):
         self.api_key = api_key
         self.model = model
-        self.context = ""
         self._initialize_llm()
 
     def _initialize_llm(self):
