@@ -1,14 +1,10 @@
-import os
-from dotenv import load_dotenv
 from langchain_groq import ChatGroq
-
-load_dotenv()
 
 
 class GenerateGroqResponse:
     """Handles LLM initialization and response generation using Groq."""
 
-    def __init__(self, api_key="", model=""):
+    def __init__(self, api_key="", model="llama-3.1-8b-instant"):
         self.api_key = api_key
         self.model = model
         self.context = ""
@@ -28,6 +24,36 @@ class GenerateGroqResponse:
 
         print(f"✓ Initialized Groq LLM with model: {self.model}")
 
+    def create_context(self, retrieved_docs):
+        if not retrieved_docs:
+            print("⚠ No documents retrieved for context")
+            return
+        self.context = "\n\n".join([doc.get("content", "") for doc in retrieved_docs])
+
+    def create_prompt(self, question: str):
+        if not self.context:
+            print("⚠ Not enough context found to answer the question")
+            return None
+        if not question.strip():
+            print("")
+            return
+
+        return f"""
+            You are a helpful assistant. Answer ONLY from the provided context.
+            If the context is not enough, say exactly: "I don't have enough context."
+            Keep the answer concise and factual.
+
+            Context:
+            {self.context}
+
+            Question:
+            {question}
+
+            Answer:
+            
+
+            """
+
     def generate_answer(self, prompt):
         print("💭 Generating answer...\n")
         try:
@@ -38,18 +64,7 @@ class GenerateGroqResponse:
 
 
 def main():
-    api_key = os.environ.get("API_KEY", "")
-
-    embedding_manager = EmbeddingManager()
-    vector_store = VectorStore()
-    retriever = RAGRetreival(vector_store, embedding_manager)
-    query = "Who is Deepsikha Kafle?"
-    retrieved_docs = retriever.retrieve(query=query, top_k=3)
-    groq_llm = GenerateGroqResponse(api_key=api_key, model="llama-3.1-8b-instant")
-    groq_llm.create_context(retrieved_docs)
-    prompt = groq_llm.create_prompt(question=query)
-    response = groq_llm.generate_answer(prompt)
-    print(response)
+    pass
 
 
 if __name__ == "__main__":
