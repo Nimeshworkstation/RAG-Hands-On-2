@@ -1,11 +1,3 @@
-def create_context(retrieved_docs):
-    if not retrieved_docs:
-        print("⚠ No documents retrieved for context")
-        return
-    context = "\n\n".join([doc.get("content", "") for doc in retrieved_docs])
-    return context
-
-
 def create_prompt(question: str, context: str):
     if not context:
         print("⚠ Not enough context found to answer the question")
@@ -31,13 +23,13 @@ def create_prompt(question: str, context: str):
         """
 
 
-def create_context(retrieved_docs, detail=False):
+def create_context(retrieved_docs, detail_mode=False):
     details = {}
     if not retrieved_docs:
         print("⚠ No documents retrieved for context")
         return ""
     context = "\n\n".join([doc.get("content", "") for doc in retrieved_docs])
-    if not detail:
+    if not detail_mode:
         return context
     details["sources"] = [
         {

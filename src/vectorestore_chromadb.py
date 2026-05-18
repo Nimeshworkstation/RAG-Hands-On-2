@@ -11,7 +11,7 @@ class VectorStore:
     def __init__(
         self,
         collection_name: str = "pdf-documents",
-        persist_directory: str = "data/vector_store",
+        persist_directory: str = "..data/vector_store/chromadb/",
     ):
         self.collection_name = collection_name
         self.persist_directory = persist_directory
@@ -107,7 +107,10 @@ class VectorStore:
                     )
             print(f"Retrieved {len(retrieved_docs)} docuemnt (after filtering)")
         else:
-            print("No document found")
+            print(
+                f"No collection named '{self.collection_name}' was found at "
+                f"'{self.persist_directory}'. Check the collection before querying."
+            )
 
         return retrieved_docs
 

@@ -72,6 +72,7 @@ def load_text_file(data_dir):
 
 
 def load_all_documents(data_dir, file_types):
+    print(f"\n{"*"*50}\nDATA INGESTION PIPELINE \n{"*"*50}\n")
     loaders = {"txt": load_text_file, "pdf": load_pdf_file}
     data_path = Path(data_dir)
     if not data_path.exists():
@@ -82,6 +83,10 @@ def load_all_documents(data_dir, file_types):
         loader_func = loaders[type]
         document = loader_func(data_path)
         all_documents.extend(document)
+    print(
+        f"\nFinal: loaded {len(all_documents)} total document chunks from file types: {', '.join(file_types)} ✓ \n "
+    )
+
     return all_documents
 
 

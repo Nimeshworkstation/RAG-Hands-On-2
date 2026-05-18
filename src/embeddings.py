@@ -1,7 +1,6 @@
 from sentence_transformers import SentenceTransformer
 import numpy as np
 from typing import List
-from data_loader import load_all_documents
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
@@ -14,6 +13,7 @@ class EmbeddingManager:
         chunk_overlap=200,
         upload_types=[],
     ):
+        print(f"\n{"*"*50}\n EMBEDDING PIPELINE \n {"*"*50}\n")
         self.model_name = model_name
         self.model = None
         self.chunk_size = chunk_size
@@ -53,14 +53,8 @@ class EmbeddingManager:
         print(f"\n✓ Generated embeddings with shape: {embeddings.shape}")
         return embeddings
 
-    def embed_documents(self, path, file_types=[]):
+    def embed_documents(self, documents):
         print("\n📥 Step 1/3: Loading documents...")
-
-        if not file_types:
-            print("No file type provided to process... ")
-            return None
-
-        documents = load_all_documents(path, file_types)
 
         if not documents:
             print("\nNo documents loaded..")
