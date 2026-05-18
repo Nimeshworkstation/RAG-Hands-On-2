@@ -6,6 +6,21 @@ from langchain_community.document_loaders import (
     TextLoader,
 )
 
+""" 
+def load_documents_directory_loader(data_dir: Path):
+    "Using Directory loader instead of Individual loader"
+    documents = []
+    dir_loader = DirectoryLoader(
+        path=data_dir,
+        glob="*.pdf",
+        loader_cls=PyPDFLoader,
+        show_progress=True,
+    )
+    documents.extend(dir_loader.load())
+    return documents
+
+"""
+
 
 def update_metadata(loader, path):
     for docs in loader:
