@@ -41,7 +41,7 @@ class EmbeddingManager:
         chunks = text_splitter.split_documents(documents=document)
         total_chunks.extend(chunks)
         print(
-            f"Splitted {len(document)} Documents into {len(total_chunks)} chunks ✓ \n"
+            f"Chunked {len(document)} source document page(s) into {len(total_chunks)} chunk(s) ✓ \n"
         )
         return total_chunks
 
@@ -57,7 +57,7 @@ class EmbeddingManager:
         print("\n📥 Step 1/3: Loading documents...")
 
         if not documents:
-            print("\nNo documents loaded..")
+            print("No documents loaded..")
             return None
 
         print("\n✂️  Step 2/3: Chunking documents...")

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "0",
+    "source": "data\\text_one.txt",
+    "file_name": "text_one.txt",
+    "extension": ".txt",
+    "created_at": "2026-05-19T21:31:10.678083",
+    "content": "RAG (Retrieval-Augmented Generation) is a technique that combines information retrieval with text generation. \nInstead of relying only on a model's internal memory, RAG first searches a document collection for relevant context. \nThe retrieved passages are then provided to the language model to produce a more accurate and grounded response.\n\nA typical RAG pipeline has five steps:\n1. Data ingestion: collect documents from sources like PDFs, web pages, and notes.\n2. Chunking: split large documents into smaller text chunks.\n3. Embedding: convert each chunk into a vector representation.\n4. Indexing: store vectors in a vector database for fast similarity search.\n5. Retrieval + generation: find top matching chunks for a user query and generate an answer using those chunks.\n\nRAG is useful for question answering, internal knowledge assistants, customer support bots, and document search systems. \nIts main benefits are reduced hallucinations, better factual accuracy, and easy updates by changing the document store.\n\nCommon challenges include poor chunk size, weak embeddings, and missing metadata filters. \nGood practices include cleaning text, storing source metadata, and evaluating retrieval quality with real user questions."
+  },
+  {
+    "id": "1",
+    "source": "data\\Anschreiben_f\u00fcr_Bewerbung_Nimesh.pdf",
+    "file_name": "Anschreiben_f\u00fcr_Bewerbung_Nimesh.pdf",
+    "extension": ".pdf",
+    "created_at": "2026-05-12T09:55:57+00:00",
+    "content": "Essen, 12. M ai 2026\nInitiativbewerbung als Software-Entwickler\nSehr geehrte Damen und Herren,\nauf der Suche nach einer neuen beru\u0000ichen Herausforderung bin ich auf die\nInternetpr\u00e4senz Ihres Unternehmens aufmerksam geworden und m\u00f6chte Ihnen hiermit\nmeine Zusammenarbeit anbieten.\nZuletzt habe ich als Softwareentwickler bei der Werkbank GmbH, einer Digitalagentur aus\nBochum, gearbeitet. Dort programmierte ich in Python und war f\u00fcr die Weiterentwicklung\nvon Websites zust\u00e4ndig. Unter anderem habe ich mit dem Wagtail CM S gearbeitet und viel\nBackend-Entwicklung mit den Frameworks Django, Django REST und HTM X gemacht.\nObwohl ich nur sieben M onate dort gearbeitet habe, konnte ich viele Kenntnisse aus\nmeinem Studium in die Praxis umsetzen. Besonders in der Webentwicklung half mir dabei\nmeine vorherige Erfahrung als Junior Webentwickler bei der Conmeet GmbH. Dort war ich\nals Full-Stack-Entwickler angestellt und verantwortlich f\u00fcr die Implementierung von APIs\nsowie die Entwicklung neuer Komponenten im Frontend.\nAuch w\u00e4hrend meines M asters in Computer Engineering an der Universit\u00e4t Duisburg-Essen\nhabe ich mit Webtechnologien und Full-Stack-Entwicklung gearbeitet. In meiner\nM asterarbeit besch\u00e4ftigte ich mich mit der Sentimentanalyse f\u00fcr Suchergebnis-Snippets\nund der Visualisierung. Durch mein Studium bin ich in der Lage meine Kenntnisse in den\nverschiedenen Programmiersprachen, beispielsweise Python, Java und C# anzuwenden.\nNeben fundiertem Wissen \u00fcber die Konzepte der objektorientierten Programmierung(OOP)\nund verschiedene Programmierparadigmen verf\u00fcge ich \u00fcber praktische Erfahrung mit Git\nund GitHub sowie Continuous integration und Continuos deplyoment work\u0000ows mit\nGitHub Actions. Kenntnisse in Containerisierung mit Docker, dem Einsatz von Nginx als\nWebserver und die Optimierung von Deployment-Prozessen sind ebenfalls vorhanden.\nZus\u00e4tzlich zu meiner bisherigen Berufserfahrung habe ich in eigenen kleinen Projekten"
+  },
+  {
+    "id": "2",
+    "source": "data\\Anschreiben_f\u00fcr_Bewerbung_Nimesh.pdf",
+    "file_name": "Anschreiben_f\u00fcr_Bewerbung_Nimesh.pdf",
+    "extension": ".pdf",
+    "created_at": "2026-05-12T09:55:57+00:00",
+    "content": "Webserver und die Optimierung von Deployment-Prozessen sind ebenfalls vorhanden.\nZus\u00e4tzlich zu meiner bisherigen Berufserfahrung habe ich in eigenen kleinen Projekten\ngelernt, Probleme e\u0000zient zu erkennen und unterschiedliche L\u00f6sungen f\u00fcr allgemeine\nProbleme zu entwickeln.\nNimeshGhimire \u2022 Lindenallee 77, 45127 Essen DE \u2022 015218459331 \u2022 nimesh.ghimire99@gmail.com"
+  },
+  {
+    "id": "3",
+    "source": "data\\Anschreiben_f\u00fcr_Bewerbung_Nimesh.pdf",
+    "file_name": "Anschreiben_f\u00fcr_Bewerbung_Nimesh.pdf",
+    "extension": ".pdf",
+    "created_at": "2026-05-12T09:55:57+00:00",
+    "content": "Derzeit erweitere ich meine Kenntnisse in FastAPI und setze es in eigenen kleinen\nProjekten um. Seit einem M onat besch\u00e4ftige ich mich mit RAG-Pipelines mit LangChain und\nVektordatenbanken wie ChromaDB, mit dem Ziel, KI-Agenten zu entwickeln, die in\nWebsites/Webanwendungen integriert werden k\u00f6nnen, um Nutzer bei ihren Anfragen zu\nunterst\u00fctzen und spezi\u0000sche Aufgaben zu \u00fcbernehmen.\nEinem pers\u00f6nlichen Vorstellungsgespr\u00e4ch sehe ich ho\u0000nungsvoll entgegen.Ich w\u00fcrde\ngerne Ihr Team mein Fachwissen und praktische Erfahrungen erg\u00e4nzen. Ich freue mich\nwenn wir k\u00fcnftig erfolgreich zusammenarbeiten und Sie eine Einsatzm\u00f6glichkeit f\u00fcr mich\nsehen.\nM it freundlichen Gr\u00fc\u00dfen\nNimesh Ghimire"
+  }
+]

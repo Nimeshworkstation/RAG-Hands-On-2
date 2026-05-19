@@ -7,11 +7,11 @@ from typing import List
 import numpy as np
 
 
-class VectorStore:
+class ChromaVectorStore:
     def __init__(
         self,
         collection_name: str = "pdf-documents",
-        persist_directory: str = "..data/vector_store/chromadb/",
+        persist_directory: str = "store/vector_store/chromadb/",
     ):
         self.collection_name = collection_name
         self.persist_directory = persist_directory
@@ -116,7 +116,7 @@ class VectorStore:
 
 
 def main():
-    vectorstore = VectorStore()
+    vectorstore = ChromaVectorStore()
 
 
 if __name__ == "__main__":

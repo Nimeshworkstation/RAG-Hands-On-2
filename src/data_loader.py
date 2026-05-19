@@ -84,7 +84,7 @@ def load_all_documents(data_dir, file_types):
         document = loader_func(data_path)
         all_documents.extend(document)
     print(
-        f"\nFinal: loaded {len(all_documents)} total document chunks from file types: {', '.join(file_types)} ✓ \n "
+        f"\nFinal: loaded {len(all_documents)} source document page(s) from file types: {', '.join(file_types)} ✓ \n "
     )
 
     return all_documents
@@ -97,3 +97,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
