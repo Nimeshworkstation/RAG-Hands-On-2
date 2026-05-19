@@ -1,51 +1,88 @@
-# rag_2
+﻿# rag_2
 
-A simple Retrieval-Augmented Generation (RAG) pipeline using:
-- LangChain document loaders
-- SentenceTransformers for embeddings
-- ChromaDB as vector store
-- Groq (`langchain_groq`) for answer generation
+Simple Retrieval-Augmented Generation (RAG) project with two vector store backends:
+- ChromaDB
+- FAISS
 
-## Project Structure
+It loads local PDF/TXT files, chunks them, embeds text with `all-MiniLM-L6-v2`, retrieves relevant chunks, and asks Groq for final answers.
 
-- `main.py`: entry point (ingestion + query flow)
-- `src/data_loader.py`: loads `.pdf` and `.txt`, enriches metadata
-- `src/embeddings.py`: chunks documents and generates embeddings
-- `src/vectorestore_chromadb.py`: stores/retrieves vectors with ChromaDB
-- `src/response_models/prompt_utils.py`: shared prompt/context builders
-- `src/response_models/groq_response.py`: Groq LLM wrapper
-- `data/`: local source documents
+## Current Project Structure
 
-## How It Works
+```text
+rag_2/
+|-- data/
+|   |-- Anschreiben_für_Bewerbung_Nimesh.pdf
+|   `-- text_one.txt
+|-- notebook/
+|   |-- document.ipynb
+|   `-- pdf_loader.ipynb
+|-- src/
+|   |-- __init__.py
+|   |-- data_loader.py
+|   |-- embeddings.py
+|   |-- vectorstore_chromadb.py
+|   |-- vectorstore_faiss.py
+|   `-- response_models/
+|       |-- groq_response.py
+|       `-- prompt_utils.py
+|-- store/
+|   `-- vector_store/
+|       |-- chromadb/
+|       `-- faiss/
+|-- .env
+|-- .gitignore
+|-- main.py
+`-- README.md
+```
 
-1. Load documents from `data/` (`.txt` and `.pdf`).
-2. Split documents into chunks.
-3. Generate embeddings for chunks.
-4. Upsert chunks + embeddings into ChromaDB.
-5. For a query:
-   - Embed the query
-   - Retrieve top-k relevant chunks
-   - Build context + prompt
-   - Ask Groq model and print answer
+## What Each Module Does
+
+- `src/data_loader.py`
+  - Recursively loads `*.pdf` and `*.txt` files from `data/`.
+  - Adds metadata keys: `source`, `file_name`, `extension`.
+
+- `src/embeddings.py`
+  - Uses `SentenceTransformer("all-MiniLM-L6-v2")`.
+  - Splits documents with `RecursiveCharacterTextSplitter` (`chunk_size=2000`, `chunk_overlap=200`).
+  - Returns `(chunks, embeddings)`.
+
+- `src/vectorstore_chromadb.py`
+  - Persists vectors in `store/vector_store/chromadb/`.
+  - Uses deterministic SHA256 IDs for chunks.
+  - Retrieves documents with distance and similarity score.
+
+- `src/vectorstore_faiss.py`
+  - Persists FAISS index + metadata in `store/vector_store/faiss/`.
+  - Normalizes embeddings with L2.
+  - Stores metadata in `faiss_metadata.json`.
+
+- `src/response_models/prompt_utils.py`
+  - Builds retrieval context.
+  - Builds prompt for grounded answer generation.
+
+- `src/response_models/groq_response.py`
+  - Wraps `ChatGroq` (`llama-3.1-8b-instant` by default).
+
+- `main.py`
+  - Runs both ingestion pipelines (Chroma and FAISS).
+  - Runs both QA flows (Chroma and FAISS).
 
 ## Setup
 
-## 1) Create and activate virtual environment
+1. Create and activate a virtual environment.
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-## 2) Install dependencies
+2. Install dependencies.
 
 ```powershell
-pip install langchain-core langchain-community langchain-groq sentence-transformers chromadb python-dotenv langchain-text-splitters pypdf numpy
+pip install langchain-core langchain-community langchain-groq sentence-transformers chromadb python-dotenv langchain-text-splitters pypdf numpy faiss-cpu
 ```
 
-## 3) Configure environment variables
-
-Create `.env` in project root:
+3. Create `.env` in project root.
 
 ```env
 API_KEY=your_groq_api_key_here
@@ -53,67 +90,43 @@ API_KEY=your_groq_api_key_here
 
 ## Run
 
-`main.py` currently calls query flow by default.
+Run from project root:
 
 ```powershell
 python main.py
 ```
 
-## Ingest Documents Into ChromaDB
+Current `main.py` flow is:
+1. Ingest to ChromaDB.
+2. Ingest to FAISS.
+3. Ask question with Chroma retrieval.
+4. Ask question with FAISS retrieval.
 
-In `main.py`, uncomment `data_saver()` inside `main()` to ingest documents first:
+## Storage Paths
 
-```python
-def main():
-    data_saver()
-    api_key = os.environ.get("API_KEY")
-    get_answer_chroma(query="Who is Nimesh Ghimire ? ", api_key=api_key)
-```
+- Chroma artifacts: `store/vector_store/chromadb/`
+- FAISS artifacts:
+  - `store/vector_store/faiss/faiss_index.bin`
+  - `store/vector_store/faiss/faiss_metadata.json`
 
-Then run:
+## Notes and Caveats
 
-```powershell
-python main.py
-```
+- Run from the repository root so `from src...` imports resolve correctly.
+- FAISS query embedding should be 2D (`[query]`), not raw string, to avoid `normalize_L2` shape errors.
+- `main.py` currently re-ingests on each run.
+  - Chroma uses stable IDs, so upsert behavior is safer.
+  - FAISS appends vectors each run and can accumulate duplicates.
+- `src/vectorstore_faiss.py` method name is `retreive_documents` (typo in method name, but used consistently).
+- If `API_KEY` is missing, Groq initialization will fail.
 
-## Notes / Current Caveats
+## Notebooks
 
-- In `src/vectorestore_chromadb.py`, default `persist_directory` is `"..data/vector_store/chromadb/"`. Consider changing to `"data/vector_store/chromadb/"`.
-- `prompt_utils.create_context()` expects key `similiarity_score`, while retrieval output uses `similarity_score`. This key mismatch can break detail mode.
-- `main.py` includes a `breakpoint()` in `data_saver()`. Remove it for normal runs.
-- If no documents are ingested yet, retrieval may return empty results.
+- `notebook/document.ipynb`: basic `Document` structure experiments.
+- `notebook/pdf_loader.ipynb`: early pipeline scratch notebook.
 
-## Quick API Usage (Programmatic)
+## Suggested Next Improvements
 
-```python
-from src.data_loader import load_all_documents
-from src.embeddings import EmbeddingManager
-from src.vectorestore_chromadb import VectorStore
-from src.response_models.prompt_utils import create_context, create_prompt
-from src.response_models.groq_response import GenerateGroqResponse
-
-# ingest
-docs = load_all_documents("data", ["txt", "pdf"])
-em = EmbeddingManager()
-chunks, vectors = em.embed_documents(docs)
-store = VectorStore()
-store.add_documents(chunks, vectors)
-
-# ask
-query = "Who is Nimesh Ghimire?"
-q_vec = em.generate_embedding(query)
-hits = store.retrieve_documents(q_vec, top_k=1)
-context = create_context(hits)
-prompt = create_prompt(question=query, context=context)
-llm = GenerateGroqResponse(api_key="<API_KEY>")
-answer = llm.generate_answer(prompt)
-print(answer)
-```
-
-## Future Improvements
-
-- Add `requirements.txt` or `pyproject.toml`
-- Add CLI flags for ingest vs query mode
-- Add better logging instead of `print`
-- Add unit tests for loaders, embedding pipeline, and prompt utilities
-- Add support for additional LLM providers
+1. Add `requirements.txt` or `pyproject.toml`.
+2. Add CLI flags to choose backend and mode (`ingest` vs `query`).
+3. Add dedup/checkpoint logic for FAISS ingestion.
+4. Add tests for loader, embedding, and retrieval logic.
