@@ -1,4 +1,5 @@
 from google import genai
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 
 class GenerateGeminiResponse:
@@ -15,11 +16,7 @@ class GenerateGeminiResponse:
         if not self.model:
             raise ValueError("model not provided")
         try:
-            self.llm = genai.Client(api_key=self.api_key)
-
-            # self.llm = ChatGroq(
-            #     api_key=self.api_key, model=self.model, temperature=0.1, max_tokens=1024
-            # )
+            self.llm = ChatGoogleGenerativeAI(api_key=self.api_key, model=self.model)
         except Exception as e:
             raise RuntimeError(f"Failed to initialize LLM: {str(e)}")
 
@@ -31,10 +28,7 @@ class GenerateGeminiResponse:
 
         print("💭 Generating answer...\n")
         try:
-            response = self.llm.models.generate_content(
-                model=self.model,
-                contents=prompt,
-            )
+            response = self.llm.invoke(prompt)
         except Exception as e:
             raise RuntimeError(f"Failed to generate answer: {str(e)}")
         if not detail:
